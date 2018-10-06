@@ -14,18 +14,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+
         <activity android:name=".SplashActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
+
 
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.DetailsActivity"
             android:label="@string/title_activity_details"
@@ -62,6 +65,15 @@
         <service
             android:name=".widget.RestaurantListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity android:name=".LoginActivity"
+            android:label="LOG IN">
+        </activity>
+
+
+        <activity android:name=".FirebaseActivity"
+            android:label="Register">
+        </activity>
 
     </application>
 

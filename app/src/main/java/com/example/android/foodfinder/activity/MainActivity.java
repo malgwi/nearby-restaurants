@@ -18,8 +18,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.android.foodfinder.LoginActivity;
 import com.example.android.foodfinder.R;
 import com.example.android.foodfinder.fragment.DetailsActivityFragment;
 import com.example.android.foodfinder.fragment.MainActivityFragment;
@@ -28,14 +30,19 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity
-        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         MainActivityFragment.Callback {
 
+
+    private FirebaseAuth firebaseAuth;
+    private TextView textViewUserEmail;
+    private Button buttonLogout;
 
     private static final int REQUEST_RESOLVE_ERROR = 1001;
     private static final String LOG_TAG = "MAIN_ACTIVITY";
@@ -56,6 +63,24 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        if (firebaseAuth.getCurrentUser() == null){
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
+        }
+
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+        textViewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
+
+        textViewUserEmail.setText("Welcome "+user.getEmail());
+
+        buttonLogout = (Button) findViewById(R.id.buttonLogout);
+
+        buttonLogout.setOnClickListener(this);
+
         //setSupportActionBar(toolbar);
         ButterKnife.bind(this);
         if (savedInstanceState == null) {
@@ -264,6 +289,15 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, DetailsActivity.class);
             intent.putExtra("placeId", placeId);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == buttonLogout){
+            firebaseAuth.signOut();
+            finish();
+            startActivity(new Intent(this, LoginActivity.class));
         }
     }
 }
